@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Merchant {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  email       String   @unique
+  api_key     String   @unique
+  api_secret  String
+  webhook_url String?
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  orders      Order[]
+  payments    Payment[]
+
+  @@map("merchants")
+}
+
+model Order {
+  id          String    @id
+  merchant_id String    @db.Uuid
+  merchant    Merchant  @relation(fields: [merchant_id], references: [id])
+  amount      Int
+  currency    String    @default("INR")
+  receipt     String?
+  notes       Json?
+  status      String    @default("created")
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  payments    Payment[]
+
+  @@index([merchant_id])
+  @@map("orders")
+}
+
+model Payment {
+  id                String   @id
+  order_id          String
+  order             Order    @relation(fields: [order_id], references: [id])
+  merchant_id       String   @db.Uuid
+  merchant          Merchant @relation(fields: [merchant_id], references: [id])
+  amount            Int
+  currency          String   @default("INR")
+  method            String   // "upi" or "card"
+  status            String   @default("created")
+  vpa               String?
+  card_network      String?
+  card_last4        String?
+  error_code        String?
+  error_description String?
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  refunds           Refund[]
+
+  @@index([order_id])
+  @@index([merchant_id])
+  @@index([status])
+  @@map("payments")
+}
+
+model Refund {
+  id                String   @id
+  payment_id        String
+  payment           Payment  @relation(fields: [payment_id], references: [id])
+  merchant_id       String   @db.Uuid
+  merchant          Merchant @relation(fields: [merchant_id], references: [id])
+  amount            Int
+  currency          String   @default("INR")
+  status            String   @default("processed")
+  notes             Json?
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  @@index([payment_id])
+  @@index([merchant_id])
+  @@map("refunds")
+}
