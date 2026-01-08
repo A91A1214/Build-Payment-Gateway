@@ -39,7 +39,7 @@ function Transactions() {
                         <tr key={tx.id} data-test-id="transaction-row" data-payment-id={tx.id}>
                             <td data-test-id="payment-id">{tx.id}</td>
                             <td data-test-id="order-id">{tx.order_id}</td>
-                            <td data-test-id="amount">₹{(tx.amount / 100).toFixed(2)}</td>
+                            <td data-test-id="amount">{tx.amount}</td>
                             <td data-test-id="method" style={{ textTransform: 'uppercase' }}>{tx.method}</td>
                             <td data-test-id="status">
                                 <span className={`status-${tx.status}`}>{tx.status}</span>

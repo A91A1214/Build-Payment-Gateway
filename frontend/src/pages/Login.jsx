@@ -22,7 +22,7 @@ function Login() {
             <h1>Merchant Login</h1>
             <form data-test-id="login-form" onSubmit={handleLogin}>
                 <input
-                    data-test-id="login-email"
+                    data-test-id="email-input"
                     type="email"
                     placeholder="Email"
                     value={email}
@@ -30,7 +30,7 @@ function Login() {
                     required
                 />
                 <input
-                    data-test-id="login-password"
+                    data-test-id="password-input"
                     type="password"
                     placeholder="Password"
                     value={password}

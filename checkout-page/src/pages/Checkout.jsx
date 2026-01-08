@@ -95,8 +95,7 @@ function Checkout() {
                 <h2>Complete Payment</h2>
                 <div>
                     <span>Amount: </span>
-                    <strong data-test-id="order-amount">{(order.amount / 100).toFixed(2)}</strong>
-                    <span data-test-id="order-currency">{order.currency}</span>
+                    <span data-test-id="order-amount">₹{(order.amount / 100).toFixed(2)}</span>
                 </div>
                 <div>
                     <span>Order ID: </span>
@@ -125,15 +124,15 @@ function Checkout() {
                     )}
 
                     {method === 'card' && (
-                        <div className="payment-form">
+                        <form data-test-id="card-form" onSubmit={handlePayment} className="payment-form">
                             <input data-test-id="card-number-input" placeholder="Card Number" value={card.number} onChange={e => setCard({ ...card, number: e.target.value })} required />
                             <div style={{ display: 'flex', gap: '10px' }}>
-                                <input data-test-id="card-expiry-input" placeholder="MM/YY" value={card.expiry} onChange={handleExpiry} required />
-                                <input data-test-id="card-cvv-input" placeholder="CVV" type="password" value={card.cvv} onChange={e => setCard({ ...card, cvv: e.target.value })} required />
+                                <input data-test-id="expiry-input" placeholder="MM/YY" value={card.expiry} onChange={handleExpiry} required />
+                                <input data-test-id="cvv-input" placeholder="CVV" type="password" value={card.cvv} onChange={e => setCard({ ...card, cvv: e.target.value })} required />
                             </div>
                             <input data-test-id="cardholder-name-input" placeholder="Cardholder Name" value={card.name} onChange={e => setCard({ ...card, name: e.target.value })} required />
-                            <button data-test-id="pay-button" className="pay-btn" onClick={handlePayment}>Pay ₹{(order.amount / 100).toFixed(2)}</button>
-                        </div>
+                            <button data-test-id="pay-button" type="submit" className="pay-btn">Pay ₹{(order.amount / 100).toFixed(2)}</button>
+                        </form>
                     )}
                 </>
             )}
@@ -141,7 +140,7 @@ function Checkout() {
             {status === 'processing' && (
                 <div data-test-id="processing-state" className="status-screen">
                     <div className="spinner"></div>
-                    <h2 data-test-id="payment-status">Processing Payment...</h2>
+                    <span data-test-id="processing-message">Processing payment...</span>
                     <p>Please do not refresh the page</p>
                 </div>
             )}
@@ -149,8 +148,12 @@ function Checkout() {
             {status === 'success' && (
                 <div data-test-id="success-state" className="status-screen">
                     <div style={{ fontSize: '4rem', color: '#10b981' }}>✓</div>
-                    <h2 data-test-id="payment-status">Payment Success!</h2>
-                    <p>Transaction ID: <span data-test-id="payment-id">{paymentId}</span></p>
+                    <h2>Payment Successful!</h2>
+                    <div>
+                        <span>Payment ID: </span>
+                        <span data-test-id="payment-id">{paymentId}</span>
+                    </div>
+                    <span data-test-id="success-message">Your payment has been processed successfully</span>
                 </div>
             )}
 
