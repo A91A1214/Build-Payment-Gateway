@@ -19,7 +19,6 @@ model Merchant {
   updated_at  DateTime @updatedAt
   orders      Order[]
   payments    Payment[]
-  refunds     Refund[]
 
   @@map("merchants")
 }

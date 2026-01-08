@@ -383,7 +383,7 @@ app.get('/api/v1/dashboard/stats', authenticate, async (req, res) => {
   res.json({
     totalTransactions: payments.length,
     totalAmount,
-    successRate: Math.round(successRate) + '%'
+    successRate: successRate.toFixed(2) + '%'
   });
 });
 
